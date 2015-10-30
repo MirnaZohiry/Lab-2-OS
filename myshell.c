@@ -1,9 +1,8 @@
 /*
  * MyShell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
- * Copyright (C) 2015, <Mirna Mohamed, Mohannad Naser Abdo, Luisa Rojas-Garcia>
+ * Copyright (C) 2015, <Mirna Zohiry, Mohannad Abdo, Luisa Rojas-Garcia>
  * All rights reserved.
- *
  */
 
 #include <stdio.h>
@@ -128,24 +127,6 @@ int main(int argc, char *argv[]) {
         }
         // help command -- Display user manual (readme)
         else if (strcmp(command, "help") == 0) {
-        	/*
-            char current_char;
-            FILE *readme_file;
-            readme_file = fopen("/Users/luisarojas/Downloads/myshell_final/readme", "r");
-            // File exists in current directory
-            if(readme_file) {
-            	// End of file hasn't been reached
-                while ((current_char = getc(file)) != EOF)
-                	// Read current characted
-                    putchar(current_char);
-                // Close file stream
-                fclose(file);
-            printf("\n");
-            }
-            // File does not exist in current directory
-            else {
-            	fputs("An error has occured. Please try again later.\n", stderr);
-            }*/
 
             // Displays the readme file using the more filter
             char *args[] = {"more", "readme", 0};
