@@ -1,12 +1,15 @@
-SOFE 3950U / CSCI 3020U (Lab 2) - readme
-Below are the shell commands defined internally in this shell.
 
-expression			((description))
+SOFE 3950U / CSCI 3020U (Lab 2) - readme
+
+Description: application designed to be used for unix shell environment - Linux. Below are the commands defined internally in this shell.
+
+((expression))		((description))
 cd <directory>		Change the current default directory to <directory>.
-clr					Clear the screen.
+clr			Clear the screen.
 dir <directory>		List the contents of directory <directory>.
-environ 			List all the environment strings.
+environ 		List all the environment strings.
 echo <comment>		Display <comment> on the display followed by a new line.
-help				Display the user manual using the more filter.
-pause				Pause operation of the shell until 'Enter' is pressed.
-quit				Quit the shell.
+help			Display the user manual using the more filter.
+pause			Pause operation of the shell until 'Enter' is pressed.
+quit			Quit the shell.
+

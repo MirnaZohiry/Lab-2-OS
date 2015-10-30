@@ -1,10 +1,11 @@
 /*
  * MyShell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
- * Copyright (C) 2015, <GROUP MEMBERS>
+ * Copyright (C) 2015, <Mirna Mohamed, Mohannad Naser Abdo, Luisa Rojas-Garcia>
  * All rights reserved.
  * 
  */
+ 
 #ifndef MYSHELL_H_
 #define MYSHELL_H_
 
