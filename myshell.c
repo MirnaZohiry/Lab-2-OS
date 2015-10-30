@@ -12,8 +12,6 @@
 #include <sys/types.h>
  #include <sys/stat.h> 
 #include <string.h>
-//include "utility.h"
-//#include "myshell.h"
 
 // Constants
 #define BUFFER_LEN 256

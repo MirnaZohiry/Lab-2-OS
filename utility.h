@@ -13,7 +13,4 @@
 // extern keyword such as in the following example:
 // extern void display_help(void);
 
-extern void parse(char *line, char **argv);
-extern void execute(char **argv);
-
 #endif /* UTILITY_H_ */
