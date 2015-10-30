@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/types.h>
- #include <sys/stat.h> 
+#include <sys/stat.h> 
 #include <string.h>
 
 // Constants
@@ -28,6 +28,9 @@ int main(int argc, char *argv[]) {
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
     char directory[BUFFER_LEN] = {"/home"};
+    // Used for execvp function below - fork()
+    //char *args[] = {"more", "readme", 0};
+    
     FILE *filepnt;
     filepnt = stdin;
     getcwd(directory, BUFFER_LEN);
@@ -66,13 +69,14 @@ int main(int argc, char *argv[]) {
         }
 		// pause command -- Pause operation of the shell until 'Enter' is pressed
         else if (strcmp(command, "pause") == 0) {
-            char s[2];
-            printf("System paused. Press ENTER to continue.\n");
-            // While there is no new line (ENTER),
+            char s[2]={' '};
+            printf("System paused. Press ENTER to continue.");
+            // While there array is empty
             while(strcmp(s, "\n")!= 0) {
             	// Accept user unput
             	fgets(s, 2, stdin);
             }
+
             printf("System resumed.\n");
 	   }
         // quit command -- Exit the shell
@@ -131,7 +135,7 @@ int main(int argc, char *argv[]) {
         else if (strcmp(command, "help") == 0) {
             char current_char;
             FILE *readme_file;
-            readme_file = fopen("/Users/luisarojas/Downloads/myshell_final/readme", "r");
+            readme_file = fopen("readme", "r");
             // File exists in current directory
             if(readme_file) {
                 // End of file hasn't been reached
@@ -146,12 +150,19 @@ int main(int argc, char *argv[]) {
             else {
                 fputs("An error has occured. Please try again later.\n", stderr);
             }
-            
+
             /*
             // Displays the readme file using the more filter - but need fork()
-            char *args[] = {"more", "readme", 0};
-            execvp("more", args);
-            */
+            pid_t pid = fork();
+            
+            if (pid==0) {
+                execvp("more", args);
+                exit(0);
+            
+            }
+            else if(pid>0){
+                wait(NULL);
+            }*/
         }
         // Command not defined - doesn't exist
         else {
