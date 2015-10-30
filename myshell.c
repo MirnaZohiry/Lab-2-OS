@@ -31,8 +31,7 @@ int main(int argc, char *argv[]) {
     FILE *filepnt;
     filepnt = stdin;
     getcwd(directory, BUFFER_LEN);
-    struct stat sb;
-	int err = stat(buffer, &sb);
+    
     
     // First prompt
     printf("%s/[myshell]> # ", directory);
@@ -50,6 +49,8 @@ int main(int argc, char *argv[]) {
         // cd command -- Change the current directory
         if (strcmp(command, "cd") == 0) {
         	// No directory specified
+            struct stat sb;
+            int err = stat(buffer, &sb);
             if (strcmp(buffer, "") == 0) {
                 fputs("ERROR: Please enter a directory.\n", stderr);
             }
@@ -97,10 +98,13 @@ int main(int argc, char *argv[]) {
             else {
                 memcpy(directory, buffer, BUFFER_LEN);
                 // Directory provided doesn't exist
+                struct stat sb;
+                int err = stat(buffer, &sb);
                 if (err == -1) {
-                	fputs("ERRPR: Please enter a VALID directory.\n", stderr);
+                	fputs("ERROR: Please enter a VALID directory.\n", stderr);
                 }
                 else {
+
                 	// Make currentdir the directory provided
                 	DIR *currentdir = opendir(buffer);
                 	// Create and initialize struct for every item in the directory
@@ -125,11 +129,29 @@ int main(int argc, char *argv[]) {
         }
         // help command -- Display user manual (readme)
         else if (strcmp(command, "help") == 0) {
-
-            // Displays the readme file using the more filter
+            char current_char;
+            FILE *readme_file;
+            readme_file = fopen("/Users/luisarojas/Downloads/myshell_final/readme", "r");
+            // File exists in current directory
+            if(readme_file) {
+                // End of file hasn't been reached
+                while ((current_char = getc(readme_file)) != EOF)
+                    // Read current characted
+                    putchar(current_char);
+                // Close file stream
+                fclose(readme_file);
+            printf("\n");
+            }
+            // File does not exist in current directory
+            else {
+                fputs("An error has occured. Please try again later.\n", stderr);
+            }
+            
+            /*
+            // Displays the readme file using the more filter - but need fork()
             char *args[] = {"more", "readme", 0};
             execvp("more", args);
-
+            */
         }
         // Command not defined - doesn't exist
         else {
