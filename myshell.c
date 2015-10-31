@@ -33,11 +33,14 @@ int main(int argc, char *argv[]) {
     
     FILE *filepnt;
     filepnt = stdin;
+
+    FILE *ofilepnt;
+    ofilepnt = stdout;
+
     getcwd(directory, BUFFER_LEN);
     
-    
     // First prompt
-    printf("%s/[myshell]> # ", directory);
+    fprintf(ofilepnt,"%s/[myshell]> # ", directory);
 
     // Infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, filepnt) != NULL) {
@@ -70,23 +73,29 @@ int main(int argc, char *argv[]) {
 		// pause command -- Pause operation of the shell until 'Enter' is pressed
         else if (strcmp(command, "pause") == 0) {
             char s[2]={' '};
-            printf("System paused. Press ENTER to continue.");
-            // While there array is empty
+            fprintf(ofilepnt, "%s\n", "System paused. Press ENTER to continue.");
+            // While there array is not empty
             while(strcmp(s, "\n")!= 0) {
             	// Accept user unput
             	fgets(s, 2, stdin);
             }
 
-            printf("System resumed.\n");
+            fprintf(ofilepnt,"System resumed.\n");
 	   }
         // quit command -- Exit the shell
         else if (strcmp(command, "quit") == 0) {
             return EXIT_SUCCESS;
         }
-        // environ command -- Llst all environment strings
+        // environ command -- List all environment strings
         else if (strcmp(command, "environ") == 0) {
-        	// Display strings using the env system call
-            system("env");
+        	
+            int i = 0;
+
+            // Displays variables using a loop
+            while(environ[i] != NULL) {
+                fprintf(ofilepnt, "%s\n", environ[i]);
+                i++;
+          }
         }
         // clr command -- Clear the terminal
         else if (strcmp(command, "clr") == 0) {
@@ -124,7 +133,7 @@ int main(int argc, char *argv[]) {
         }
         // echo command -- Display input
         else if (strcmp(command, "echo") == 0) {
-            printf("%s\n", buffer);
+            fprintf(ofilepnt,"%s\n", buffer);
         }
         // myshell command -- Take command like input from file (batch)
         else if (strcmp(command, "myshell") == 0) {	
@@ -133,18 +142,19 @@ int main(int argc, char *argv[]) {
         }
         // help command -- Display user manual (readme)
         else if (strcmp(command, "help") == 0) {
+            
             char current_char;
             FILE *readme_file;
             readme_file = fopen("readme", "r");
             // File exists in current directory
             if(readme_file) {
                 // End of file hasn't been reached
-                while ((current_char = getc(readme_file)) != EOF)
+                while ((current_char = fgetc(readme_file)) != EOF)
                     // Read current characted
                     putchar(current_char);
                 // Close file stream
                 fclose(readme_file);
-            printf("\n");
+            fprintf(ofilepnt, "\n\n");
             }
             // File does not exist in current directory
             else {
@@ -164,9 +174,76 @@ int main(int argc, char *argv[]) {
                 wait(NULL);
             }*/
         }
+        else if (strcmp(command, "io") == 0) {
+            // No arguments are provided
+           if (buffer[0] == NULL) {
+                fprintf(ofilepnt, "Please specify input and output files.");
+            } else {
+
+                // Create tokens array and int to keep track of its size
+                char * tokens[3];
+                size_t n = 0;
+
+                // Tokenize buffer into "<", "input", ">", and "output"
+                for (char * p = strtok(buffer, " "); p; p = strtok(NULL, " ")) {
+                    tokens[n++] = p;
+                }
+
+                // The user has provided more than what is needed
+                if (n > 4) {
+                    fprintf(ofilepnt, "Too many arguments. Use \"help\" to display the manual.\n");
+                }
+                else {
+                    if (strcmp(tokens[0], "<") == 0 &&
+                       (strcmp(tokens[2], ">") || strcmp(tokens[2], ">>"))) {
+                        
+                        // Set up streams
+                        FILE *curr_filepnt = filepnt;
+                        FILE *curr_ofilepnt = ofilepnt;
+
+                        // Open file to read form: token[0]
+                        curr_filepnt = filepnt;
+                        filepnt = fopen(tokens[1], "r");
+
+                        // The output file name corresponds to the second token in the array
+                        if (strcmp(tokens[2], ">") == 0) {
+                            // Write/overwrite output to file
+                            curr_ofilepnt = ofilepnt;
+                            // Open file to write to: token[3]
+                            ofilepnt = fopen(tokens[3], "w");
+                        }
+                        else if (strcmp(tokens[2], ">>") == 0) {
+                            // Append to file
+                            curr_ofilepnt = ofilepnt;
+                            ofilepnt = fopen(tokens[3], "a");
+                        }                           
+                    }
+                    else {
+                        // Incorrect syntax
+                        fprintf(ofilepnt, "Please check your syntax. Use \"help\" to display the manual.\n");
+                    }
+
+                }
+            }
+
+        }
+
+        else if (strcmp(buffer, "&") == 0) {
+
+        	char *str1 = "open -a "; // For Mac
+        //	char *str1 = "./" // For Linux
+            // Concatinate into program string
+        	char *program = (char *) malloc(1 + strlen(str1)+ strlen(command));
+      		strcpy(program, str1);
+      		strcat(program, command);
+
+        	fprintf(ofilepnt, "Executing program: %s\n", command);
+            // Execute program using system call
+        	system(program);
+        }
         // Command not defined - doesn't exist
         else {
-            fputs("ERROR: Unsupported command, use \"help\" to display the manual\n", stderr);
+            fputs("ERROR: Unsupported command, use \"help\" to display the manual.\n", stderr);
         }
         
         // If reaches end of file, stop

@@ -1,4 +1,2 @@
 environ
-help
-dir /Users
 echo Batch file ran successfully

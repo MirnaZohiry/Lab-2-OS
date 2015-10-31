@@ -2,7 +2,8 @@
 SOFE 3950U / CSCI 3020U (Lab 2) - readme
 Authors: Mirna Zohiry, Mohannad Naser Abdo, Luisa Rojas-Garcia
 
-Description: application designed to be used for unix shell environment - Linux. Below are the commands defined internally in this shell.
+Description:
+Application designed to be used for unix shell environment - Linux. Below are the commands defined internally in this shell.
 
 ((expression))		((description))
 cd <directory>		Change the current default directory to <directory>.
@@ -13,4 +14,16 @@ echo <comment>		Display <comment> on the display followed by a new line.
 help			Display the user manual using the more filter.
 pause			Pause operation of the shell until 'Enter' is pressed.
 quit			Quit the shell.
+<program> &		Executes program specified in the background.		
+io < input >> output	Reads from input file and appends to the output file.
+io < input > output	Reads from input file and writes over-writes output file.
+
+Background Program Execution:
+the program is launched and control is returned to the shell immediately, allowing the user to run other commands.
+
+I/O Redirection:
+Redirection means capturing output from a file, command, program within a script and sending it as input to another file, command, program (Cooper, 2014). It is used to take the command entered by the user through the terminal and write the standard output to a file; if said file does not exist, a new file is to be created and named as specified prior to writing the output into it. 
+
+Program Environment:
+Backgrounding a long process has the effect that the UNIX prompt is returned immediately, and other tasks can be carried out while the original process continues executing.
 
